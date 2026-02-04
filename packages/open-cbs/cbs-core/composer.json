@@ -1,0 +1,21 @@
+{
+    "name": "open-cbs/cbs-core",
+    "description": "Core Banking System - cbs-core Module",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "OpenCbs\\CbsCore\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OpenCbs\\CbsCore\\CbsCoreServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "illuminate/support": "^12.0"
+    }
+}

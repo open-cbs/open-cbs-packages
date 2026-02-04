@@ -1,0 +1,24 @@
+{
+    "name": "open-cbs/cbs-addresses",
+    "description": "Core Banking System - cbs-addresses Module",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "OpenCbs\\CbsAddresses\\": "src/",
+            "OpenCbs\\CbsAddresses\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OpenCbs\\CbsAddresses\\CbsAddressesServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "illuminate/support": "^12.0",
+        "open-cbs/cbs-core": "*",
+        "staudenmeir/eloquent-has-many-deep": "^1.7"
+    }
+}

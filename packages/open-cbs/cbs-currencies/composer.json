@@ -1,0 +1,21 @@
+{
+    "name": "open-cbs/cbs-currencies",
+    "description": "Core Banking System - cbs-currencies Module",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "OpenCbs\\CbsCurrencies\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OpenCbs\\CbsCurrencies\\CbsCurrenciesServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "illuminate/support": "^12.0"
+    }
+}

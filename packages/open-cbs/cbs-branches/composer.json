@@ -1,0 +1,21 @@
+{
+    "name": "open-cbs/cbs-branches",
+    "description": "Core Banking System - cbs-branches Module",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "OpenCbs\\CbsBranches\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OpenCbs\\CbsBranches\\CbsBranchesServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "illuminate/support": "^12.0"
+    }
+}

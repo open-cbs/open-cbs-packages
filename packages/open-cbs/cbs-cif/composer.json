@@ -1,0 +1,22 @@
+{
+    "name": "open-cbs/cbs-cif",
+    "description": "Core Banking System - cbs-cif Module",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "OpenCbs\\CbsCif\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OpenCbs\\CbsCif\\CbsCifServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "illuminate/support": "^12.0",
+        "open-cbs/cbs-core": "*"
+    }
+}

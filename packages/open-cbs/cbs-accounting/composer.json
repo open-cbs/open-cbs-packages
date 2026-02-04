@@ -1,0 +1,21 @@
+{
+    "name": "open-cbs/cbs-accounting",
+    "description": "Core Banking System - cbs-accounting Module",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "OpenCbs\\CbsAccounting\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "OpenCbs\\CbsAccounting\\CbsAccountingServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "illuminate/support": "^12.0"
+    }
+}

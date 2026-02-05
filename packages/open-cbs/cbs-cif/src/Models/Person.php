@@ -19,6 +19,11 @@ class Person extends Model
         return $this->morphMany(Address::class, 'addressable');
     }
 
+    public function identifications()
+    {
+        return $this->hasMany(Identification::class);
+    }
+
     public function relationships()
     {
         return $this->belongsToMany(Person::class, 'cbs_cif.person_relationships', 'person_id', 'related_person_id')

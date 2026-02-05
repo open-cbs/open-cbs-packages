@@ -6,9 +6,7 @@ use OpenCbs\CbsCore\Actions\Action;
 use OpenCbs\CbsCif\DTOs\CreatePersonDTO;
 use OpenCbs\CbsCif\Models\Customer;
 use OpenCbs\CbsCif\Models\Person;
-use OpenCbs\CbsCif\Models\Identification;
-use CreateAddressAction; // Hypothetical, need to implement in cbs-addresses
-// We need a way to create addresses. Ideally cbs-addresses provides an Action.
+use OpenCbs\CbsAddresses\Actions\CreateAddressAction;
 
 class CreateCustomerAction extends Action
 {
@@ -33,8 +31,11 @@ class CreateCustomerAction extends Action
                 'kyc_status' => 'pending'
             ]);
 
-            // 4. Handle Addresses (TODO: Delegate to cbs-addresses Action)
-            // foreach ($personDto->addresses as $addrDto) { ... }
+            // 4. Handle Addresses
+            $createAddressAction = new CreateAddressAction();
+            foreach ($personDto->addresses as $addrDto) {
+                $createAddressAction($person, $addrDto);
+            }
 
             return $customer;
         });
@@ -43,7 +44,6 @@ class CreateCustomerAction extends Action
     private function generateCifId(): string
     {
         // Simple generation logic for now. 
-        // In real world, this might check a sequence or format (e.g., BRANCH-YEAR-SEQ)
         return 'CIF-' . date('Ymd') . '-' . rand(1000, 9999);
     }
 }

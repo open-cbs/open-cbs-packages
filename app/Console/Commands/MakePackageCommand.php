@@ -13,7 +13,7 @@ class MakePackageCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:package {name? : The name of the package (e.g., cbs-reporting)}';
+    protected $signature = 'make:package {name? : The name of the package (e.g., cbs-reporting)} {--vendor=open-cbs : The vendor name}';
 
     /**
      * The console command description.
@@ -29,8 +29,8 @@ class MakePackageCommand extends Command
     {
         $name = $this->argument('name') ?? $this->ask('What is the name of the package? (e.g., cbs-reporting)');
         $name = Str::kebab($name);
+        $vendor = $this->option('vendor');
 
-        $vendor = 'open-cbs';
         $fullPackageName = "$vendor/$name";
         $packagePath = base_path("packages/$vendor/$name");
 
@@ -46,16 +46,18 @@ class MakePackageCommand extends Command
             'database/seeders',
             'routes',
             'docs',
+            'tests/Feature',
+            'tests/Unit',
             'src/Actions',
             'src/DTOs',
             'src/Events',
+            'src/Listeners',
             'src/Http/Controllers',
             'src/Models',
             'src/Observers',
             'src/Policies',
             'src/Repositories',
             'src/Services',
-            'src/Providers',
         ];
 
         foreach ($directories as $dir) {
@@ -67,20 +69,19 @@ class MakePackageCommand extends Command
         $this->createComposerJson($packagePath, $fullPackageName, $name, $vendor);
         $this->createReadme($packagePath, $fullPackageName);
         $this->createServiceProvider($packagePath, $name, $vendor);
+        $this->createRoutes($packagePath);
+        $this->createExampleTest($packagePath, $name, $vendor);
 
         $this->info("Package created successfully!");
         $this->line("Next steps:");
         $this->line("1. Run `composer update` to register the package.");
-        $this->line("2. Add the service provider to `config/app.php` or `bootstrap/providers.php` if not auto-discovered.");
+        $this->line("2. Add the service provider to `bootstrap/providers.php` if not auto-discovered.");
     }
 
     protected function createComposerJson($path, $fullName, $name, $vendor)
     {
         $namespace = $this->studlyNamespace($vendor) . '\\\\' . $this->studlyNamespace($name) . '\\\\';
         $providerClass = $namespace . $this->studlyNamespace($name) . 'ServiceProvider';
-        // unescape needed for json file, but strictly for writing:
-        // Double backslash in php string = single backslash in output. 
-        // We need double backslash in JSON string. so we need 4 backslashes in PHP string.
 
         $content = <<<JSON
 {
@@ -146,27 +147,46 @@ use Illuminate\Support\ServiceProvider;
 
 class $className extends ServiceProvider
 {
-    public function register()
+    public function register(): void
     {
-        // Register services
         // \$this->mergeConfigFrom(__DIR__.'/../config/$name.php', '$name');
     }
 
-    public function boot()
+    public function boot(): void
     {
-        // \$this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        // \$this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        \$this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        \$this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         // \$this->loadViewsFrom(__DIR__.'/../resources/views', '$name');
     }
 }
 PHP;
-        // ensure Providers directory exists (it should from loop)
         File::put("$path/src/$className.php", $content);
-        // Wait, user asked for src/, events etc. AND src/Providers. 
-        // usually main provider is in src/ or src/Providers/. 
-        // The prompt said "service provider etc" in "src". I'll put it in src/ directory directly for simplicity as per current convention in this project, 
-        // looking at cbs-cif/src/CbsCifServiceProvider.php from previous turns.
-        // Wait, let me check the file structure of cbs-cif again.
+    }
+
+    protected function createRoutes($path)
+    {
+        $content = <<<PHP
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('api')->group(function () {
+    // Add your package routes here
+});
+PHP;
+        File::put("$path/routes/api.php", $content);
+    }
+
+    protected function createExampleTest($path, $name, $vendor)
+    {
+        $content = <<<PHP
+<?php
+
+test('example', function () {
+    expect(true)->toBeTrue();
+});
+PHP;
+        File::put("$path/tests/Feature/ExampleTest.php", $content);
     }
 
     protected function studlyNamespace($value)

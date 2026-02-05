@@ -17,4 +17,9 @@ class Customer extends Model
     {
         return $this->morphMany(Address::class, 'addressable');
     }
+
+    public function person()
+    {
+        return $this->belongsTo(Person::class);
+    }
 }

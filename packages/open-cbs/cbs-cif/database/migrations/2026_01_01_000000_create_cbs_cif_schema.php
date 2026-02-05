@@ -7,7 +7,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement('CREATE SCHEMA IF NOT EXISTS cbs_cif');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('CREATE SCHEMA IF NOT EXISTS cbs_cif');
+        }
     }
 
     public function down(): void
